@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTube | Il tuo spazio di studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header class="glass-header">
+            <div class="logo">
+                <img src="./logo.png" alt="StudyTube Logo" id="app-logo">
+            </div>
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" id="video-input" placeholder="Incolla link YouTube o cerca un argomento...">
+                    <button id="load-video">Cerca</button>
+                </div>
+                <div id="search-results-menu" class="glass-card hidden"></div>
+            </div>
+            <div class="header-actions">
+                <button id="focus-toggle" class="icon-btn" title="Focus Mode">🎯</button>
+            </div>
+        </header>
+
+        <main class="content">
+            <div class="player-section">
+                <div id="player-container" class="glass-card">
+                    <div id="youtube-player"></div>
+                    <div id="player-placeholder">
+                        <div class="placeholder-content">
+                            <p>Inserisci un video per iniziare la tua sessione di studio</p>
+                            <div class="tutorial-steps">
+                                <span>1. Scegli un video</span>
+                                <span>2. Attiva il timer</span>
+                                <span>3. Concentrati</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="sidebar glass-card">
+                <div class="timer-card">
+                    <h3>Timer Pomodoro</h3>
+                    <div class="timer-display" id="timer">25:00</div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="primary-btn">Start</button>
+                        <button id="reset-timer" class="secondary-btn">Reset</button>
+                    </div>
+                </div>
+
+                <div class="notes-card">
+                    <h3>Note di Studio</h3>
+                    <textarea id="study-notes"
+                        placeholder="Prendi appunti qui... i tuoi pensieri verranno salvati automaticamente."></textarea>
+                </div>
+            </aside>
+        </main>
+
+        <footer class="glass-footer">
+            <p>Creato da <strong>amogaddy</strong> per il tuo studio efficiente e organizato</p>
+        </footer>
+    </div>
+    <script type="module" src="./main.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+
+</html>

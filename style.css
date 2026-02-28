@@ -1,0 +1,346 @@
+:root {
+    --bg-dark: #05060f;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --accent: #6366f1;
+    --accent-glow: rgba(99, 102, 241, 0.3);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: radial-gradient(circle at top right, #1e1b4b, transparent),
+        radial-gradient(circle at bottom left, #0f172a, var(--bg-dark));
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header Styles */
+.glass-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+#app-logo {
+    height: 40px;
+    object-fit: contain;
+}
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 0 1 500px;
+    position: relative;
+}
+
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+#search-results-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 10px;
+    z-index: 1000;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#search-results-menu.hidden {
+    display: none;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-result-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.result-thumb {
+    width: 80px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.result-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.result-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.result-channel {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.search-container input {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: var(--transition);
+}
+
+.search-container input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.search-container button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.search-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--accent-glow);
+}
+
+/* Content Layout */
+.content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    flex: 1;
+    overflow: hidden;
+}
+
+.player-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 1rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+#player-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#youtube-player {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    display: none;
+}
+
+.placeholder-content {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.tutorial-steps {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.tutorial-steps span {
+    background: var(--card-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.timer-card {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: 600;
+    margin: 1rem 0;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent-glow);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.primary-btn,
+.secondary-btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.primary-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: white;
+}
+
+.notes-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.notes-card textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    resize: none;
+    margin-top: 1rem;
+    outline: none;
+    line-height: 1.6;
+    font-family: inherit;
+}
+
+/* Focus Mode */
+body.focus-mode .glass-header,
+body.focus-mode .glass-footer {
+    display: none;
+}
+
+body.focus-mode .content {
+    grid-template-columns: 1fr;
+    padding: 0;
+}
+
+body.focus-mode .sidebar {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 300px;
+    height: auto;
+    max-height: 80vh;
+    z-index: 1000;
+    opacity: 0.1;
+    transition: opacity 0.5s;
+}
+
+body.focus-mode .sidebar:hover {
+    opacity: 1;
+}
+
+/* Button styles */
+.icon-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.icon-btn:hover {
+    background: var(--accent);
+    transform: scale(1.1);
+}
+
+.glass-footer {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 1024px) {
+    .content {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    .sidebar {
+        height: auto;
+    }
+}
