@@ -1,3 +1,9 @@
+import { inject } from '@vercel/analytics';
+import { injectSpeedInsights } from '@vercel/speed-insights';
+
+inject();
+injectSpeedInsights();
+
 let player;
 let timerInterval;
 let timeLeft = 25 * 60;
@@ -61,11 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getHealthyInstancesList() {
         try {
-            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent('https://api.invidious.io/instances?sort_by=health,type')}`;
+            const apiUrl = 'https://api.invidious.io/instances?sort_by=health,type';
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
             const response = await fetch(proxyUrl);
             const data = await response.json();
+            const instances = JSON.parse(data.contents);
 
-            const filtered = data
+            const filtered = instances
                 .filter(inst => inst[1].api && inst[1].type === 'https' && inst[1].health > 90)
                 .map(inst => inst[1].uri);
 
@@ -99,14 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const apiUrl = `${instance}/api/v1/search?q=${encodeURIComponent(query)}&type=video`;
-            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
 
             console.log(`Attempting search using: ${instance}`);
             const response = await fetch(proxyUrl);
 
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-            const results = await response.json();
+            const data = await response.json();
+            const results = JSON.parse(data.contents);
 
             if (!results || !Array.isArray(results)) throw new Error('Invalid JSON response');
 
@@ -127,34 +136,81 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const GEMINI_API_KEY = "AIzaSyDHWVD_V70rPZ6QxufMpKwr3tZNJUA424o";
+    const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    async function analyzeWithAI(title, author) {
+        try {
+            const prompt = `Analizza se questo video di YouTube è di tipo educativo, scolastico o utile per lo studio. Rispondi esattamente con una sola parola: 'SI' per educativo/studio, 'NO' per intrattenimento/distrazione. \nTitolo: "${title}" \nCanale: "${author}"`;
+
+            const response = await fetch(GEMINI_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        temperature: 0.1,
+                        maxOutputTokens: 5
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                console.warn(`Gemini API returned ${response.status}`);
+                return null;
+            }
+
+            const data = await response.json();
+            if (data.candidates &&
+                data.candidates[0] &&
+                data.candidates[0].content &&
+                data.candidates[0].content.parts &&
+                data.candidates[0].content.parts[0]) {
+                const result = data.candidates[0].content.parts[0].text.trim().toUpperCase();
+                console.log(`AI Analysis for "${title}": ${result}`);
+                return result.includes('SI');
+            }
+            console.warn('Gemini response structure unexpected:', data);
+            return null;
+        } catch (e) {
+            console.error('AI Analysis failed, falling back to keywords:', e);
+            return null;
+        }
+    }
+
     const studyKeywords = ['studio', 'tutorial', 'lezione', 'spiegazione', 'corso', 'scuola', 'università', 'appunti', 'howto', 'learn', 'impara', 'education', 'math', 'matematica', 'storia', 'fisica', 'chimica', 'scienza', 'informatica', 'coding', 'programmazione'];
     const distractionKeywords = ['gameplay', 'gaming', 'funny', 'vlog', 'trailer', 'reazione', 'reaction', 'official music', 'official video', 'prank', 'sfida'];
 
-    function isStudyVideo(title, author = "") {
-        const fullText = (title + " " + author).toLowerCase();
+    async function isStudyVideo(title, author = "") {
+        const aiResult = await analyzeWithAI(title, author);
+        if (aiResult !== null) return aiResult;
 
-        // Check for distraction keywords first
+        // Fallback Keyword Logic
+        const fullText = (title + " " + author).toLowerCase();
         const hasDistraction = distractionKeywords.some(kw => fullText.includes(kw));
         if (hasDistraction) return false;
-
-        // Check for study keywords
         const hasStudyKw = studyKeywords.some(kw => fullText.includes(kw));
         return hasStudyKw;
     }
 
-    function displaySearchResults(results) {
+    async function displaySearchResults(results) {
         const menu = document.getElementById('search-results-menu');
         menu.innerHTML = '';
 
-        // Filter results based on the algorithm
-        const filteredResults = results.filter(v => isStudyVideo(v.title, v.author));
+        // Perform parallel AI validation for the top 5 results
+        const validationPromises = results.slice(0, 5).map(async video => {
+            const isStudy = await isStudyVideo(video.title, video.author);
+            return isStudy ? video : null;
+        });
 
-        if (filteredResults.length === 0) {
-            menu.innerHTML = '<div style="padding: 10px; font-size: 0.9rem; color: var(--accent);">Nessun video educativo trovato. Prova una ricerca più specifica (es. "Lezione di storia").</div>';
+        const validatedResults = (await Promise.all(validationPromises)).filter(v => v !== null);
+
+        if (validatedResults.length === 0) {
+            menu.innerHTML = '<div style="padding: 10px; font-size: 0.9rem; color: var(--accent);">Nessun video educativo trovato con l\'analisi AI. Prova una ricerca più specifica.</div>';
             return;
         }
 
-        filteredResults.slice(0, 3).forEach(video => {
+        validatedResults.slice(0, 3).forEach(video => {
             const item = document.createElement('div');
             item.className = 'search-result-item';
 
@@ -193,12 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const instance = healthyInstances[currentInstanceIndex % healthyInstances.length];
             const apiUrl = `${instance}/api/v1/videos/${id}`;
-            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
 
             const response = await fetch(proxyUrl);
             const data = await response.json();
+            const videoData = JSON.parse(data.contents);
 
-            if (!isStudyVideo(data.title, data.author)) {
+            if (!isStudyVideo(videoData.title, videoData.author)) {
                 alert("⚠️ Questo video non sembra essere a scopo educativo. StudyTube è progettato per aiutarti a studiare, non per distrarti!");
                 return;
             }

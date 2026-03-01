@@ -4,72 +4,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyTube | Il tuo spazio di studio</title>
+    <title>StudyTube | Benvenuto</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
+    <style>
+        :root {
+            --timeline-color: var(--accent);
+        }
+
+        .landing-hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .cta-container {
+            margin-top: 1rem;
+        }
+
+        .timeline-section {
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+        }
+
+        .timeline-container {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--timeline-color);
+            box-shadow: 0 0 15px var(--timeline-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.4rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--timeline-color);
+            box-shadow: 0 0 10px var(--timeline-color);
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .timeline-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .timeline-content ul li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .timeline-content ul li::before {
+            content: '✦';
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .start-btn {
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(138, 43, 226, 0.6);
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
         <header class="glass-header">
             <div class="logo">
-                <img src="./logo.png" alt="StudyTube Logo" id="app-logo">
-            </div>
-            <div class="search-container">
-                <div class="search-bar">
-                    <input type="text" id="video-input" placeholder="Incolla link YouTube o cerca un argomento...">
-                    <button id="load-video">Cerca</button>
-                </div>
-                <div id="search-results-menu" class="glass-card hidden"></div>
+                <img src="/StudyTube_pasqua.png" alt="StudyTube Logo" id="app-logo">
             </div>
             <div class="header-actions">
-                <button id="focus-toggle" class="icon-btn" title="Focus Mode">🎯</button>
+                <a href="/search.html" class="primary-btn" style="text-decoration: none;">Accedi alla Ricerca</a>
             </div>
         </header>
 
-        <main class="content">
-            <div class="player-section">
-                <div id="player-container" class="glass-card">
-                    <div id="youtube-player"></div>
-                    <div id="player-placeholder">
-                        <div class="placeholder-content">
-                            <p>Inserisci un video per iniziare la tua sessione di studio</p>
-                            <div class="tutorial-steps">
-                                <span>1. Scegli un video</span>
-                                <span>2. Attiva il timer</span>
-                                <span>3. Concentrati</span>
-                            </div>
+        <main>
+            <section class="landing-hero">
+                <h1 class="hero-title">StudyTube</h1>
+                <p class="hero-subtitle">Trasforma YouTube nel tuo ambiente di studio definitivo. Niente distrazioni,
+                    solo concentrazione e produttività.</p>
+                <div class="cta-container">
+                    <a href="/search.html" class="start-btn">Inizia a Studiare</a>
+                </div>
+            </section>
+
+            <section class="timeline-section">
+                <h2>Il Nostro Viaggio</h2>
+                <div class="timeline-container">
+                    <!-- Week 1: March 2026 (Updated) -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Settimana 1 - Marzo 2026 (Aggiornamento Pasquale)</div>
+                        <div class="timeline-content" class="glass-card">
+                            <h3>L'Evoluzione con l'AI</h3>
+                            <ul>
+                                <li><strong>Integrazione AI Gemini</strong>: Analisi intelligente dei video per bloccare
+                                    le distrazioni tramite intelligenza artificiale.</li>
+                                <li><strong>Tema Pasquale</strong>: Aggiornamento estetico del logo e dell'interfaccia
+                                    per festeggiare la Pasqua.</li>
+                                <li>Sistema di caricamento con frasi meme motivazionali (con pausa di 3 secondi).</li>
+                                <li>Implementazione Ricerca Robusta con fallback automatico su 3+ istanze.</li>
+                                <li>Integrazione Vercel Analytics e Speed Insights per prestazioni ottimizzate.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Week 1: Feb 2026 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">Febbraio 2026</div>
+                        <div class="timeline-content" class="glass-card">
+                            <h3>La Nascita</h3>
+                            <ul>
+                                <li>Configurazione iniziale dell'ambiente di studio senza algoritmi di raccomandazione.
+                                </li>
+                                <li>Implementazione Timer Pomodoro e sistema di Note sincronizzato.</li>
+                                <li>Design UI Dark Mode con effetti Glassmorphism.</li>
+                                <li>Integrazione API YouTube IFrame Player.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <aside class="sidebar glass-card">
-                <div class="timer-card">
-                    <h3>Timer Pomodoro</h3>
-                    <div class="timer-display" id="timer">25:00</div>
-                    <div class="timer-controls">
-                        <button id="start-timer" class="primary-btn">Start</button>
-                        <button id="reset-timer" class="secondary-btn">Reset</button>
-                    </div>
-                </div>
-
-                <div class="notes-card">
-                    <h3>Note di Studio</h3>
-                    <textarea id="study-notes"
-                        placeholder="Prendi appunti qui... i tuoi pensieri verranno salvati automaticamente."></textarea>
-                </div>
-            </aside>
+            </section>
         </main>
 
         <footer class="glass-footer">
             <p>Creato da <strong>amogaddy</strong> per il tuo studio efficiente e organizato</p>
         </footer>
     </div>
-    <script type="module" src="./main.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 
 </html>
