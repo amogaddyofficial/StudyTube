@@ -13,9 +13,25 @@
 
 <body>
     <div id="app">
+        <!-- Sidebar -->
+        <div id="nav-overlay" onclick="closeSidebar()"></div>
+        <nav id="side-nav">
+            <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+            <div class="sidebar-logo">
+                <img src="/StudyTube_pasqua.png" alt="StudyTube Logo">
+            </div>
+            <ul class="sidebar-links">
+                <li><a href="/index.html" class="sidebar-link">🏠 Home</a></li>
+                <li><a href="/search.html" class="sidebar-link active">🔍 Studia</a></li>
+            </ul>
+        </nav>
+
         <header class="glass-header">
-            <div class="logo">
-                <img src="/StudyTube_pasqua.png" alt="StudyTube Logo" id="app-logo">
+            <div class="header-left">
+                <button class="hamburger-btn" onclick="openSidebar()" title="Menu">☰</button>
+                <div class="logo">
+                    <img src="/StudyTube_pasqua.png" alt="StudyTube Logo" id="app-logo">
+                </div>
             </div>
             <div class="search-container">
                 <div class="search-bar">
@@ -74,6 +90,16 @@
     </div>
     <script type="module" src="./main.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        function openSidebar() {
+            document.getElementById('side-nav').classList.add('open');
+            document.getElementById('nav-overlay').classList.add('visible');
+        }
+        function closeSidebar() {
+            document.getElementById('side-nav').classList.remove('open');
+            document.getElementById('nav-overlay').classList.remove('visible');
+        }
+    </script>
 </body>
 
 </html>
