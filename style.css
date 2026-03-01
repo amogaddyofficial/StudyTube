@@ -489,7 +489,12 @@ body.focus-mode .sidebar:hover {
     color: var(--text-secondary);
 }
 
-@media (max-width: 1024px) {
+/* =====================
+   RESPONSIVE BREAKPOINTS
+   ===================== */
+
+/* ---- TABLET (640px – 1024px) ---- */
+@media (min-width: 640px) and (max-width: 1024px) {
     .content {
         grid-template-columns: 1fr;
         overflow-y: auto;
@@ -497,5 +502,190 @@ body.focus-mode .sidebar:hover {
 
     .sidebar {
         height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .timer-card,
+    .notes-card {
+        flex: 1 1 280px;
+        min-width: 0;
+    }
+
+    .notes-card textarea {
+        height: 120px;
+    }
+
+    .hero-title {
+        font-size: 2.8rem !important;
+    }
+
+    .timeline-section {
+        padding: 2rem 1.5rem !important;
+    }
+}
+
+/* ---- MOBILE (< 640px) ---- */
+@media (max-width: 639px) {
+
+    /* Header */
+    .glass-header {
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
+    }
+
+    .header-left {
+        gap: 0.5rem;
+    }
+
+    #app-logo {
+        height: 28px;
+    }
+
+    .search-container {
+        flex: 1;
+    }
+
+    #video-input {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .search-container button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    /* Search dropdown full-width */
+    #search-results-menu {
+        left: -10px;
+        right: -10px;
+    }
+
+    /* Sidebar full-width on mobile */
+    #side-nav {
+        width: 85%;
+    }
+
+    /* Main layout: vertical stack */
+    .content {
+        grid-template-columns: 1fr;
+        padding: 0.75rem;
+        gap: 0.75rem;
+        overflow-y: auto;
+    }
+
+    /* Player fixed aspect ratio */
+    #player-container {
+        aspect-ratio: 16 / 9;
+        height: auto;
+        min-height: 0;
+    }
+
+    #youtube-player {
+        width: 100%;
+        height: 100%;
+    }
+
+    .placeholder-content p {
+        font-size: 0.85rem;
+    }
+
+    .tutorial-steps {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    /* Sidebar (right panel) stacks */
+    .sidebar {
+        height: auto;
+        gap: 0.75rem;
+    }
+
+    /* Timer compact */
+    .timer-card {
+        padding: 1rem;
+    }
+
+    .timer-display {
+        font-size: 2.5rem;
+        margin: 0.5rem 0;
+    }
+
+    .timer-duration {
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .timer-duration input {
+        width: 50px;
+        font-size: 0.85rem;
+    }
+
+    .timer-controls {
+        gap: 0.5rem;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* Notes shorter on mobile */
+    .notes-card {
+        padding: 1rem;
+    }
+
+    .notes-card textarea {
+        height: 120px;
+    }
+
+    /* Focus mode adjust */
+    body.focus-mode .sidebar {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        bottom: 10px;
+    }
+
+    /* Landing page */
+    .landing-hero {
+        height: auto !important;
+        padding: 3rem 1.5rem !important;
+    }
+
+    .hero-title {
+        font-size: 2.2rem !important;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem !important;
+    }
+
+    .start-btn {
+        padding: 0.8rem 2rem !important;
+        font-size: 0.95rem;
+    }
+
+    .timeline-section {
+        padding: 2rem 1rem !important;
+    }
+
+    .timeline-container {
+        padding-left: 2rem;
+    }
+
+    .timeline-content {
+        padding: 1rem;
+    }
+
+    .glass-footer {
+        font-size: 0.75rem;
+        padding: 1rem;
     }
 }
