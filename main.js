@@ -7,6 +7,7 @@ injectSpeedInsights();
 let player;
 let timerInterval;
 let timeLeft = 25 * 60;
+let timerDuration = 25 * 60;
 let isTimerRunning = false;
 
 // YouTube API Ready Callback
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('start-timer');
     const resetBtn = document.getElementById('reset-timer');
     const notesArea = document.getElementById('study-notes');
+    const timerMinutesInput = document.getElementById('timer-minutes');
 
     // Load saved notes
     notesArea.value = localStorage.getItem('studyTube_notes') || '';
@@ -122,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Artificial delay of 3 seconds to let the user read the meme
             await new Promise(resolve => setTimeout(resolve, 3000));
 
-            displaySearchResults(results.slice(0, 3));
+            displaySearchResults(results.slice(0, 9));
         } catch (error) {
             console.warn(`Search failed on ${instance}:`, error.message);
 
@@ -198,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menu.innerHTML = '';
 
         // Perform parallel AI validation for the top 5 results
-        const validationPromises = results.slice(0, 5).map(async video => {
+        const validationPromises = results.slice(0, 9).map(async video => {
             const isStudy = await isStudyVideo(video.title, video.author);
             return isStudy ? video : null;
         });
@@ -307,9 +309,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    timerMinutesInput.addEventListener('change', () => {
+        const mins = Math.max(1, Math.min(120, parseInt(timerMinutesInput.value) || 25));
+        timerMinutesInput.value = mins;
+        timerDuration = mins * 60;
+        if (!isTimerRunning) {
+            timeLeft = timerDuration;
+            updateTimerDisplay();
+        }
+    });
+
     resetBtn.addEventListener('click', () => {
         clearInterval(timerInterval);
-        timeLeft = 25 * 60;
+        const mins = Math.max(1, Math.min(120, parseInt(timerMinutesInput.value) || 25));
+        timerDuration = mins * 60;
+        timeLeft = timerDuration;
         updateTimerDisplay();
         startBtn.textContent = 'Start';
         isTimerRunning = false;

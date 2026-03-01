@@ -234,6 +234,38 @@ body {
     text-shadow: 0 0 20px var(--accent-glow);
 }
 
+.timer-duration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.timer-duration label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.timer-duration input {
+    width: 60px;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    font-size: 0.95rem;
+    padding: 0.3rem 0.4rem;
+    outline: none;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.timer-duration input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
 .timer-controls {
     display: flex;
     gap: 1rem;
