@@ -36,7 +36,50 @@
             <div class="search-container">
                 <div class="search-bar">
                     <input type="text" id="video-input" placeholder="Incolla link YouTube o cerca un argomento...">
+                    <button id="filter-btn" class="filter-btn" title="Filtri scuola">🎚️ Filtri</button>
                     <button id="load-video">Cerca</button>
+                </div>
+                <!-- Filter Panel -->
+                <div id="filter-panel" class="filter-panel hidden">
+                    <div class="filter-title">📚 Livello scolastico</div>
+                    <div class="filter-levels">
+                        <button class="filter-chip" data-level="" data-keywords="">Tutti</button>
+                        <button class="filter-chip" data-level="infanzia"
+                            data-keywords="scuola infanzia bambini elementari">🧒 Infanzia</button>
+                        <button class="filter-chip" data-level="medie" data-keywords="scuola media terza media">📖
+                            Medie</button>
+                        <button class="filter-chip" data-level="superiori" data-keywords="scuola superiore liceo">🏫
+                            Superiori</button>
+                        <button class="filter-chip" data-level="universita"
+                            data-keywords="università universitario corso laurea">🎓 Università</button>
+                    </div>
+                    <!-- Sub-filter for Superiori -->
+                    <div id="subfilter-superiori" class="subfilter hidden">
+                        <div class="filter-title" style="font-size:0.8rem; margin-top:0.5rem;">Tipo di scuola</div>
+                        <div class="filter-levels">
+                            <button class="filter-chip sub" data-keywords="liceo scientifico">🔬 Liceo
+                                Scientifico</button>
+                            <button class="filter-chip sub" data-keywords="liceo classico">📜 Liceo Classico</button>
+                            <button class="filter-chip sub" data-keywords="istituto tecnico">⚙️ Ist. Tecnico</button>
+                            <button class="filter-chip sub" data-keywords="istituto professionale">🛠️ Ist.
+                                Professionale</button>
+                            <button class="filter-chip sub" data-keywords="liceo linguistico">🌍 Liceo
+                                Linguistico</button>
+                            <button class="filter-chip sub" data-keywords="liceo artistico">🎨 Liceo Artistico</button>
+                        </div>
+                    </div>
+                    <!-- Sub-filter for Università -->
+                    <div id="subfilter-universita" class="subfilter hidden">
+                        <div class="filter-title" style="font-size:0.8rem; margin-top:0.5rem;">Facoltà</div>
+                        <div class="filter-levels">
+                            <button class="filter-chip sub" data-keywords="ingegneria">⚙️ Ingegneria</button>
+                            <button class="filter-chip sub" data-keywords="medicina">🩺 Medicina</button>
+                            <button class="filter-chip sub" data-keywords="economia">📈 Economia</button>
+                            <button class="filter-chip sub" data-keywords="giurisprudenza">⚖️ Giurisprudenza</button>
+                            <button class="filter-chip sub" data-keywords="informatica">💻 Informatica</button>
+                            <button class="filter-chip sub" data-keywords="scienze">🔭 Scienze</button>
+                        </div>
+                    </div>
                 </div>
                 <div id="search-results-menu" class="glass-card hidden"></div>
             </div>
@@ -89,6 +132,8 @@
         <footer class="glass-footer">
             <p>Creato da <strong>amogaddy</strong> per il tuo studio efficiente e organizato</p>
         </footer>
+        <!-- Alpha Badge -->
+        <div class="alpha-badge">α Alpha 1</div>
     </div>
     <script type="module" src="./main.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>

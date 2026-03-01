@@ -35,6 +35,54 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('studyTube_notes', notesArea.value);
     });
 
+    // Filter state
+    let activeFilterKeywords = '';
+
+    // Filter button toggle
+    const filterBtn = document.getElementById('filter-btn');
+    const filterPanel = document.getElementById('filter-panel');
+    if (filterBtn && filterPanel) {
+        filterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            filterPanel.classList.toggle('hidden');
+            filterBtn.classList.toggle('active');
+        });
+    }
+
+    // Filter chip logic
+    document.querySelectorAll('.filter-chip:not(.sub)').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip:not(.sub)').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeFilterKeywords = chip.dataset.keywords || '';
+
+            // Show/hide sub-filters
+            document.querySelectorAll('.subfilter').forEach(sf => sf.classList.add('hidden'));
+            const level = chip.dataset.level;
+            if (level === 'superiori') document.getElementById('subfilter-superiori')?.classList.remove('hidden');
+            if (level === 'universita') document.getElementById('subfilter-universita')?.classList.remove('hidden');
+
+            // Reset sub-chip selection
+            document.querySelectorAll('.filter-chip.sub').forEach(c => c.classList.remove('active'));
+        });
+    });
+
+    // Sub-filter chip logic
+    document.querySelectorAll('.filter-chip.sub').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip.sub').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeFilterKeywords = chip.dataset.keywords || '';
+        });
+    });
+
+    // Close filter panel when clicking outside
+    document.addEventListener('click', (e) => {
+        if (filterPanel && !e.target.closest('.search-container')) {
+            filterPanel.classList.add('hidden');
+        }
+    });
+
     // Video Loading Logic
     loadBtn.addEventListener('click', () => {
         const query = videoInput.value.trim();
@@ -45,8 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (videoId) {
             loadVideo(videoId);
         } else {
-            searchVideos(query);
+            // Enrich query with active filter keywords
+            const enrichedQuery = activeFilterKeywords
+                ? `${query} ${activeFilterKeywords}`
+                : query;
+            searchVideos(enrichedQuery);
         }
+    });
+
+    // Also search on Enter key
+    videoInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') loadBtn.click();
     });
 
     // Close menu when clicking outside

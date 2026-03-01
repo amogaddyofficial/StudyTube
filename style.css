@@ -190,6 +190,121 @@ body {
     width: 100%;
 }
 
+/* Filter Button */
+.filter-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 0.6rem 0.9rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--accent);
+    color: white;
+}
+
+/* Filter Panel */
+.filter-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 30, 0.97);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1rem;
+    z-index: 1001;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.filter-panel.hidden {
+    display: none;
+}
+
+.filter-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filter-levels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-chip {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-family: inherit;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    background: rgba(99, 102, 241, 0.15);
+    color: white;
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.filter-chip.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.filter-chip.sub {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.7rem;
+}
+
+.subfilter {
+    margin-top: 0.3rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.subfilter.hidden {
+    display: none;
+}
+
+/* Alpha Badge */
+.alpha-badge {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    color: var(--accent);
+    padding: 0.3rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    z-index: 9999;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+}
+
 #search-results-menu {
     position: absolute;
     top: 100%;
