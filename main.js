@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('reset-timer');
     const notesArea = document.getElementById('study-notes');
     const timerMinutesInput = document.getElementById('timer-minutes');
+    const timerHoursInput = document.getElementById('timer-hours');
 
     // Load saved notes
     notesArea.value = localStorage.getItem('studyTube_notes') || '';
@@ -309,10 +310,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function getTotalSeconds() {
+        const hrs = Math.max(0, Math.min(23, parseInt(timerHoursInput.value) || 0));
+        const mins = Math.max(0, Math.min(59, parseInt(timerMinutesInput.value) || 0));
+        return hrs * 3600 + mins * 60 || 60; // minimum 1 minute
+    }
+
+    timerHoursInput.addEventListener('change', () => {
+        timerHoursInput.value = Math.max(0, Math.min(23, parseInt(timerHoursInput.value) || 0));
+        timerDuration = getTotalSeconds();
+        if (!isTimerRunning) {
+            timeLeft = timerDuration;
+            updateTimerDisplay();
+        }
+    });
+
     timerMinutesInput.addEventListener('change', () => {
-        const mins = Math.max(1, Math.min(120, parseInt(timerMinutesInput.value) || 25));
-        timerMinutesInput.value = mins;
-        timerDuration = mins * 60;
+        timerMinutesInput.value = Math.max(0, Math.min(59, parseInt(timerMinutesInput.value) || 0));
+        timerDuration = getTotalSeconds();
         if (!isTimerRunning) {
             timeLeft = timerDuration;
             updateTimerDisplay();
@@ -321,8 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     resetBtn.addEventListener('click', () => {
         clearInterval(timerInterval);
-        const mins = Math.max(1, Math.min(120, parseInt(timerMinutesInput.value) || 25));
-        timerDuration = mins * 60;
+        timerDuration = getTotalSeconds();
         timeLeft = timerDuration;
         updateTimerDisplay();
         startBtn.textContent = 'Start';
@@ -341,9 +355,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateTimerDisplay() {
-        const mins = Math.floor(timeLeft / 60);
+        const hrs = Math.floor(timeLeft / 3600);
+        const mins = Math.floor((timeLeft % 3600) / 60);
         const secs = timeLeft % 60;
-        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (hrs > 0) {
+            timerDisplay.textContent = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        } else {
+            timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
     }
 
     // Focus Mode Logic
