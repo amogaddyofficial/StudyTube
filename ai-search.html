@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyTube | Il tuo spazio di studio</title>
+    <title>StudyTube | Ricerca AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
@@ -23,8 +23,8 @@
             <ul class="sidebar-links">
                 <li><a href="/index.html" class="sidebar-link">🏠 Home</a></li>
                 <li><a href="/v2-engine.html" class="sidebar-link">🚀 V2 Engine</a></li>
-                <li><a href="/search.html" class="sidebar-link active">🔍 Studia YT</a></li>
-                <li><a href="/ai-search.html" class="sidebar-link">🤖 Ricerca AI</a></li>
+                <li><a href="/search.html" class="sidebar-link">🔍 Studia YT</a></li>
+                <li><a href="/ai-search.html" class="sidebar-link active">🤖 Ricerca AI</a></li>
             </ul>
         </nav>
 
@@ -37,37 +37,37 @@
             </div>
             <div class="search-container">
                 <div class="search-bar">
-                    <input type="text" id="video-input" placeholder="Incolla link YouTube o cerca un argomento...">
-                    <button id="filter-btn" class="filter-btn" title="Filtri scuola">🎚️ Filtri</button>
-                    <button id="load-video">Cerca</button>
+                    <input type="text" id="ai-search-input"
+                        placeholder="Chiedi all'AI (es: Riassumi la rivoluzione francese...)">
+                    <button id="filter-btn" class="filter-btn" title="Contesto scolasico">🎚️ Filtri</button>
+                    <button id="ai-search-btn">🔍 <span class="btn-text">Cerca</span></button>
                 </div>
                 <!-- Filter Panel -->
                 <div id="filter-panel" class="filter-panel hidden">
-                    <div class="filter-title">📚 Livello scolastico</div>
+                    <div class="filter-title">📚 Contesto di Studio</div>
                     <div class="filter-levels">
-                        <button class="filter-chip" data-level="" data-keywords="">Tutti</button>
+                        <button class="filter-chip" data-level="" data-keywords="">Generico</button>
                         <button class="filter-chip" data-level="infanzia"
-                            data-keywords="scuola infanzia bambini elementari">🧒 Infanzia</button>
-                        <button class="filter-chip" data-level="medie" data-keywords="scuola media terza media">📖
-                            Medie</button>
-                        <button class="filter-chip" data-level="superiori" data-keywords="scuola superiore liceo">🏫
+                            data-keywords="scuola elementare o media (spiega in modo semplice)">🧒 Bambini</button>
+                        <button class="filter-chip" data-level="medie"
+                            data-keywords="scuola media (spiega in modo chiaro ed essenziale)">📖 Medie</button>
+                        <button class="filter-chip" data-level="superiori" data-keywords="scuola superiore">🏫
                             Superiori</button>
                         <button class="filter-chip" data-level="universita"
-                            data-keywords="università universitario corso laurea">🎓 Università</button>
+                            data-keywords="livello universitario accademico (spiega nel dettaglio)">🎓
+                            Università</button>
                     </div>
                     <!-- Sub-filter for Superiori -->
                     <div id="subfilter-superiori" class="subfilter hidden">
-                        <div class="filter-title" style="font-size:0.8rem; margin-top:0.5rem;">Tipo di scuola</div>
+                        <div class="filter-title" style="font-size:0.8rem; margin-top:0.5rem;">Indirizzo</div>
                         <div class="filter-levels">
-                            <button class="filter-chip sub" data-keywords="liceo scientifico">🔬 Liceo
-                                Scientifico</button>
-                            <button class="filter-chip sub" data-keywords="liceo classico">📜 Liceo Classico</button>
-                            <button class="filter-chip sub" data-keywords="istituto tecnico">⚙️ Ist. Tecnico</button>
-                            <button class="filter-chip sub" data-keywords="istituto professionale">🛠️ Ist.
+                            <button class="filter-chip sub" data-keywords="liceo scientifico">🔬 Scientifico</button>
+                            <button class="filter-chip sub" data-keywords="liceo classico">📜 Classico</button>
+                            <button class="filter-chip sub" data-keywords="istituto tecnico">⚙️ Tecnico</button>
+                            <button class="filter-chip sub" data-keywords="istituto professionale">🛠️
                                 Professionale</button>
-                            <button class="filter-chip sub" data-keywords="liceo linguistico">🌍 Liceo
-                                Linguistico</button>
-                            <button class="filter-chip sub" data-keywords="liceo artistico">🎨 Liceo Artistico</button>
+                            <button class="filter-chip sub" data-keywords="liceo linguistico">🌍 Linguistico</button>
+                            <button class="filter-chip sub" data-keywords="liceo artistico">🎨 Artistico</button>
                         </div>
                     </div>
                     <!-- Sub-filter for Università -->
@@ -211,62 +211,25 @@
                         </div>
                     </div>
                 </div>
-                <div id="search-results-menu" class="glass-card hidden"></div>
-            </div>
-            <div class="header-actions">
-                <button id="focus-toggle" class="icon-btn" title="Focus Mode">🎯</button>
             </div>
         </header>
 
-        <main class="content">
-            <div class="player-section">
-                <div id="player-container" class="glass-card">
-                    <div id="youtube-player"></div>
-                    <div id="player-placeholder">
-                        <div class="placeholder-content">
-                            <p>Inserisci un video per iniziare la tua sessione di studio</p>
-                            <div class="tutorial-steps">
-                                <span>1. Scegli un video</span>
-                                <span>2. Attiva il timer</span>
-                                <span>3. Concentrati</span>
-                            </div>
-                        </div>
+        <main class="study-layout">
+            <div class="main-content" style="width: 100%;">
+                <div id="ai-result-container" class="glass-container" style="min-height: 400px; padding: 2rem;">
+                    <div style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+                        <h2>Cerca nel web con riassunto AI</h2>
+                        <p>Fai una domanda all'assistente AI di StudyTube. Ti risponderà cercando di sintetizzare le
+                            informazioni più utili per il tuo studio.</p>
                     </div>
                 </div>
             </div>
-
-            <aside class="sidebar glass-card">
-                <div class="timer-card">
-                    <h3>Timer Pomodoro</h3>
-                    <div class="timer-display" id="timer">25:00</div>
-                    <div class="timer-duration">
-                        <label for="timer-hours">Ore</label>
-                        <input type="number" id="timer-hours" min="0" max="23" value="0">
-                        <label for="timer-minutes">Min</label>
-                        <input type="number" id="timer-minutes" min="0" max="59" value="25">
-                    </div>
-                    <div class="timer-controls">
-                        <button id="start-timer" class="primary-btn">Start</button>
-                        <button id="reset-timer" class="secondary-btn">Reset</button>
-                    </div>
-                </div>
-
-                <div class="notes-card">
-                    <h3>Note di Studio</h3>
-                    <textarea id="study-notes"
-                        placeholder="Prendi appunti qui... i tuoi pensieri verranno salvati automaticamente."></textarea>
-                </div>
-            </aside>
         </main>
 
         <footer class="glass-footer">
             <p>Creato da <strong>amogaddy</strong> per il tuo studio efficiente e organizato</p>
         </footer>
-        <!-- Alpha Badge -->
-        <div class="alpha-badge">α Alpha 1</div>
     </div>
-    <script type="module" src="./main.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         function openSidebar() {
             document.getElementById('side-nav').classList.add('open');
@@ -277,6 +240,7 @@
             document.getElementById('nav-overlay').classList.remove('visible');
         }
     </script>
+    <script type="module" src="./ai-search.js"></script>
 </body>
 
 </html>

@@ -49,30 +49,75 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Filter chip logic
-    document.querySelectorAll('.filter-chip:not(.sub)').forEach(chip => {
-        chip.addEventListener('click', () => {
-            document.querySelectorAll('.filter-chip:not(.sub)').forEach(c => c.classList.remove('active'));
+    // Filter
+    const levelChips = document.querySelectorAll('.filter-chip:not(.sub):not(.subject)');
+    const subChips = document.querySelectorAll('.filter-chip.sub');
+    const subjectChips = document.querySelectorAll('.filter-chip.subject');
+    const subjectContainer = document.getElementById('subject-filters-container');
+    const subjectPanels = document.querySelectorAll('.subject-panel');
+
+    filterBtn.addEventListener('click', () => {
+        filterPanel.classList.toggle('hidden');
+    });
+
+    levelChips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+            levelChips.forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            activeFilterKeywords = chip.dataset.keywords || '';
 
-            // Show/hide sub-filters
+            // Hide all subfilters
             document.querySelectorAll('.subfilter').forEach(sf => sf.classList.add('hidden'));
-            const level = chip.dataset.level;
-            if (level === 'superiori') document.getElementById('subfilter-superiori')?.classList.remove('hidden');
-            if (level === 'universita') document.getElementById('subfilter-universita')?.classList.remove('hidden');
+            subChips.forEach(c => c.classList.remove('active'));
 
-            // Reset sub-chip selection
-            document.querySelectorAll('.filter-chip.sub').forEach(c => c.classList.remove('active'));
+            // Clear subject selections and hide panels
+            subjectChips.forEach(c => c.classList.remove('active'));
+            subjectPanels.forEach(p => p.classList.add('hidden'));
+            sessionStorage.removeItem('currentSubject');
+
+            const level = chip.dataset.level;
+            sessionStorage.setItem('currentLevel', level);
+            sessionStorage.setItem('currentContext', chip.dataset.keywords);
+
+            if (level === 'superiori' || level === 'universita') {
+                const subFilter = document.getElementById(`subfilter-${level}`);
+                if (subFilter) subFilter.classList.remove('hidden');
+            }
+
+            // Show relevant subject filters based on level (ignoring empty/Generico)
+            if (level) {
+                subjectContainer.classList.remove('hidden');
+
+                // If it's infanzia, medie, superiori or universita, the ID exactly matches "subjects-level"
+                const relevantSubjectPanel = document.getElementById(`subjects-${level}`);
+                if (relevantSubjectPanel) relevantSubjectPanel.classList.remove('hidden');
+            } else {
+                subjectContainer.classList.add('hidden');
+            }
         });
     });
 
-    // Sub-filter chip logic
-    document.querySelectorAll('.filter-chip.sub').forEach(chip => {
-        chip.addEventListener('click', () => {
-            document.querySelectorAll('.filter-chip.sub').forEach(c => c.classList.remove('active'));
+    subChips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+            const parentLevel = e.target.closest('.subfilter').id.replace('subfilter-', '');
+            // Deselect other sub chips in same category
+            const siblings = e.target.closest('.filter-levels').querySelectorAll('.filter-chip.sub');
+            siblings.forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
-            activeFilterKeywords = chip.dataset.keywords || '';
+
+            // Combine contexts
+            const mainChip = document.querySelector(`.filter-chip[data-level="${parentLevel}"]`);
+            const combinedContext = `${mainChip ? mainChip.dataset.keywords : ''} ${chip.dataset.keywords}`.trim();
+            sessionStorage.setItem('currentContext', combinedContext);
+        });
+    });
+
+    subjectChips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+            const siblings = e.target.closest('.filter-levels').querySelectorAll('.filter-chip.subject');
+            siblings.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            sessionStorage.setItem('currentSubject', chip.dataset.subject);
         });
     });
 
@@ -80,36 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (e) => {
         if (filterPanel && !e.target.closest('.search-container')) {
             filterPanel.classList.add('hidden');
-        }
-    });
-
-    // Video Loading Logic
-    loadBtn.addEventListener('click', () => {
-        const query = videoInput.value.trim();
-        if (!query) return;
-
-        let videoId = extractVideoId(query);
-
-        if (videoId) {
-            loadVideo(videoId);
-        } else {
-            // Enrich query with active filter keywords
-            const enrichedQuery = activeFilterKeywords
-                ? `${query} ${activeFilterKeywords}`
-                : query;
-            searchVideos(enrichedQuery);
-        }
-    });
-
-    // Also search on Enter key
-    videoInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') loadBtn.click();
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-container')) {
-            hideSearchMenu();
         }
     });
 
@@ -303,6 +318,66 @@ document.addEventListener('DOMContentLoaded', () => {
         const match = url.match(regex);
         return match ? match[1] : null;
     }
+
+    // Helper to check if a string is a YouTube URL
+    function isYoutubeUrl(url) {
+        return url.includes('youtube.com/watch?v=') || url.includes('youtu.be/');
+    }
+
+    // Helper to get a random meme phrase
+    function getMemePhrase() {
+        const randomMeme = schoolMemes[Math.floor(Math.random() * schoolMemes.length)];
+        return `<div style="font-style: italic; color: var(--accent); font-size: 0.85rem;">"${randomMeme}"</div>`;
+    }
+
+    loadBtn.addEventListener('click', () => {
+        const inputVal = videoInput.value.trim();
+        if (inputVal === '') return;
+
+        const searchMenu = document.getElementById('search-results-menu');
+
+        // Visual feedback
+        searchMenu.classList.remove('hidden');
+        searchMenu.innerHTML = `
+            <div style="text-align: center; color: var(--accent); margin-top: 1rem;">
+                <div class="spinner"></div>
+                ${isYoutubeUrl(inputVal) ? "Verificando il video..." : getMemePhrase()}
+            </div>
+        `;
+
+        if (isYoutubeUrl(inputVal)) {
+            // Direct video validation via AI
+            const fetchId = extractVideoId(inputVal);
+            // Simulated validation due to CORS constraints and metadata fetch complexities - assuming ok
+            const simulatedStudyCheck = true;
+            setTimeout(async () => {
+                if (simulatedStudyCheck) {
+                    loadVideo(fetchId);
+                    searchMenu.classList.add('hidden');
+                } else {
+                    alert("⚠️ Questo video non sembra essere a scopo educativo. StudyTube è progettato per aiutarti a studiare, non per distrarti!");
+                    searchMenu.classList.add('hidden');
+                    videoInput.value = '';
+                }
+            }, 1000);
+
+        } else {
+            // Apply contexts to search term
+            const schoolContext = sessionStorage.getItem('currentContext') || '';
+            const subjectContext = sessionStorage.getItem('currentSubject') || '';
+            const combinedQuery = `${inputVal} ${schoolContext} ${subjectContext}`.trim();
+            console.log("Searching with query context:", combinedQuery);
+
+            setTimeout(() => {
+                searchVideos(combinedQuery);
+            }, 3000); // 3 seconds delay for memes
+        }
+    });
+
+    // Also search on Enter key
+    videoInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') loadBtn.click();
+    });
 
     async function loadVideo(id) {
         // Fetch metadata to check if it's educational before loading

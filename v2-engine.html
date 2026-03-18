@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyTube V2 | Motore di Studio Illimitato</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        .v2-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            height: calc(100vh - 140px);
+            overflow: hidden;
+        }
+
+        .engine-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .engine-main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .source-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .brain-display {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .chat-output {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            overflow-y: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--glass-border);
+        }
+
+        .brain-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .generation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .gen-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .gen-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .gen-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .status-badge.ready { background: #10b981; color: white; }
+        .status-badge.working { background: var(--accent); color: white; }
+
+        .ai-message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            max-width: 90%;
+            line-height: 1.5;
+        }
+
+        .ai-message.system {
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #f472b6);
+            transition: width 0.3s ease;
+        }
+
+        .notebook-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Sidebar Navigation -->
+        <div id="nav-overlay" onclick="closeSidebar()"></div>
+        <nav id="side-nav">
+            <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+            <div class="sidebar-logo">
+                <img src="/StudyTube_pasqua.png" alt="StudyTube Logo">
+            </div>
+            <ul class="sidebar-links">
+                <li><a href="/index.html" class="sidebar-link">🏠 Home</a></li>
+                <li><a href="/v2-engine.html" class="sidebar-link active">🚀 V2 Engine</a></li>
+                <li><a href="/search.html" class="sidebar-link">🔍 Studia YT</a></li>
+                <li><a href="/ai-search.html" class="sidebar-link">🤖 Ricerca AI</a></li>
+            </ul>
+        </nav>
+
+        <header class="glass-header">
+            <div class="header-left">
+                <button class="hamburger-btn" onclick="openSidebar()" title="Menu">☰</button>
+                <div class="logo">
+                    <img src="/StudyTube_pasqua.png" alt="StudyTube Logo" id="app-logo">
+                    <span style="font-weight: 600; font-size: 1.2rem; margin-left: 0.5rem; color: var(--accent);">V2 Engine</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="reset-engine" class="secondary-btn" title="Reset Sessione">🗑️ Reset Privacy</button>
+            </div>
+        </header>
+
+        <main class="v2-layout">
+            <!-- Left Sidebar: Sources -->
+            <aside class="engine-sidebar">
+                <div class="glass-card">
+                    <h3>📥 Fonti Dati</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Carica file o incolla link per nutrire l'AI.</p>
+                    
+                    <div class="upload-zone" id="drop-zone">
+                        <span style="font-size: 2rem;">📄</span>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Trascina PDF o Testo qui</p>
+                        <input type="file" id="file-input" multiple accept=".pdf,.txt" style="display: none;">
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <input type="text" id="yt-link" class="glass-input" placeholder="Incolla link YouTube..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 12px; color: white;">
+                    </div>
+
+                    <ul class="source-list" id="source-list">
+                        <!-- Items populated via JS -->
+                    </ul>
+
+                    <div class="notebook-actions">
+                        <button id="export-notebook" class="secondary-btn" style="flex: 1; font-size: 0.75rem; padding: 0.5rem;">💾 Export DNA</button>
+                        <button id="import-notebook" class="secondary-btn" style="flex: 1; font-size: 0.75rem; padding: 0.5rem;">📂 Import Session</button>
+                        <input type="file" id="import-input" accept=".json" style="display: none;">
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Engine: Brain & Generation -->
+            <section class="engine-main">
+                <div class="glass-card brain-display">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>🧠 Il Cervello: Phi-3.5 (Logica & Struttura)</h3>
+                        <span class="status-badge ready" id="brain-status">Pronto</span>
+                    </div>
+
+                    <div class="chat-output" id="engine-output">
+                        <div class="ai-message system">
+                            Benvenuto nel Motore di Studio V2. Carica i tuoi documenti per iniziare l'analisi e generare materiali didattici.
+                        </div>
+                    </div>
+
+                    <div class="progress-container" id="gen-progress">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+
+                    <div class="brain-controls">
+                        <input type="text" id="engine-query" placeholder="Chiedi al tuo materiale..." style="flex: 1; background: var(--card-bg); border: 1px solid var(--glass-border); padding: 1rem; border-radius: 16px; color: white; outline: none;">
+                        <button id="ask-btn" class="primary-btn">Invia</button>
+                    </div>
+                </div>
+
+                <div class="generation-grid">
+                    <div class="gen-card" id="gen-pptx">
+                        <span class="gen-icon">📊</span>
+                        <h4>Crea Slide</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary);">Genera file .pptx reale</p>
+                        <button class="secondary-btn" style="margin-top: 0.75rem; width: 100%; font-size: 0.75rem;">Genera</button>
+                    </div>
+                    <div class="gen-card" id="gen-podcast">
+                        <span class="gen-icon">🎙️</span>
+                        <h4>Script Podcast</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary);">Dialogo AI tra 2 voci</p>
+                        <button class="secondary-btn" style="margin-top: 0.75rem; width: 100%; font-size: 0.75rem;">Genera</button>
+                    </div>
+                    <div class="gen-card" id="gen-audio">
+                        <span class="gen-icon">🔊</span>
+                        <h4>Audio Lezione</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary);">Genera file .mp3</p>
+                        <button class="secondary-btn" style="margin-top: 0.75rem; width: 100%; font-size: 0.75rem;">Genera</button>
+                    </div>
+                    <div class="gen-card" id="gen-video">
+                        <span class="gen-icon">📺</span>
+                        <h4>Video Slide</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary);">Esporta video MP4</p>
+                        <button class="secondary-btn" style="margin-top: 0.75rem; width: 100%; font-size: 0.75rem;">Esporta</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="glass-footer">
+            <p>StudyTube V2 | Built for Unlimited Privacy & Power</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function openSidebar() {
+            document.getElementById('side-nav').classList.add('open');
+            document.getElementById('nav-overlay').classList.add('visible');
+        }
+        function closeSidebar() {
+            document.getElementById('side-nav').classList.remove('open');
+            document.getElementById('nav-overlay').classList.remove('visible');
+        }
+    </script>
+    <script type="module" src="./v2-engine.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+</body>
+
+</html>
