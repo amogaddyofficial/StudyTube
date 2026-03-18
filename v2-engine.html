@@ -12,7 +12,7 @@
     <style>
         .v2-layout {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 1fr 350px;
             gap: 1.5rem;
             padding: 1.5rem;
             height: calc(100vh - 140px);
@@ -204,34 +204,6 @@
         </header>
 
         <main class="v2-layout">
-            <!-- Left Sidebar: Sources -->
-            <aside class="engine-sidebar">
-                <div class="glass-card">
-                    <h3>📥 Fonti Dati</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Carica file o incolla link per nutrire l'AI.</p>
-                    
-                    <div class="upload-zone" id="drop-zone">
-                        <span style="font-size: 2rem;">📄</span>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Trascina PDF o Testo qui</p>
-                        <input type="file" id="file-input" multiple accept=".pdf,.txt" style="display: none;">
-                    </div>
-
-                    <div style="margin-top: 1.5rem;">
-                        <input type="text" id="yt-link" class="glass-input" placeholder="Incolla link YouTube..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 12px; color: white;">
-                    </div>
-
-                    <ul class="source-list" id="source-list">
-                        <!-- Items populated via JS -->
-                    </ul>
-
-                    <div class="notebook-actions">
-                        <button id="export-notebook" class="secondary-btn" style="flex: 1; font-size: 0.75rem; padding: 0.5rem;">💾 Export .studynotebook</button>
-                        <button id="import-notebook" class="secondary-btn" style="flex: 1; font-size: 0.75rem; padding: 0.5rem;">📂 Import Session</button>
-                        <input type="file" id="import-input" accept=".studynotebook" style="display: none;">
-                    </div>
-                </div>
-            </aside>
-
             <!-- Main Engine: Brain & Generation -->
             <section class="engine-main">
                 <div class="glass-card brain-display">
@@ -283,6 +255,34 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Right Sidebar: Sources -->
+            <aside class="engine-sidebar">
+                <div class="glass-card">
+                    <h3>📥 Fonti Dati</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Carica file o incolla link per nutrire l'AI.</p>
+                    
+                    <div class="upload-zone" id="drop-zone">
+                        <span style="font-size: 2rem;">📄</span>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Trascina PDF o Testo qui</p>
+                        <input type="file" id="file-input" multiple accept=".pdf,.txt" style="display: none;">
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <input type="text" id="yt-link" class="glass-input" placeholder="Incolla link YouTube..." style="width: 100%; background: var(--card-bg); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 12px; color: white;">
+                    </div>
+
+                    <ul class="source-list" id="source-list">
+                        <!-- Items populated via JS -->
+                    </ul>
+
+                    <div class="notebook-actions">
+                        <button id="export-notebook" class="secondary-btn" style="flex: 1; font-size: 0.75rem; padding: 0.5rem;">💾 Export .studynotebook</button>
+                        <button id="import-notebook" class="secondary-btn" style="flex: 1; font-size: 0.75rem; padding: 0.5rem;">📂 Import Session</button>
+                        <input type="file" id="import-input" accept=".studynotebook" style="display: none;">
+                    </div>
+                </div>
+            </aside>
         </main>
 
         <footer class="glass-footer">
