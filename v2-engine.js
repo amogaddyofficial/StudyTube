@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `StudyTube_DNA_${Date.now()}.json`;
+        a.download = `StudyTube_DNA_${Date.now()}.studynotebook`;
         a.click();
         addLog("Notebook DNA esportato!");
     });
